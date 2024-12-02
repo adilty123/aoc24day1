@@ -12,7 +12,10 @@ var leftList []int
 var rightList []int
 
 func main() {
+	day2()
+}
 
+func day1() {
 	Read("input.txt")
 
 	Sort(leftList)
@@ -20,6 +23,7 @@ func main() {
 
 	FindDiff()
 	findSimilarity()
+
 }
 
 func findSimilarity() {
