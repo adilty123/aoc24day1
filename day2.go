@@ -49,8 +49,66 @@ func IsSafe(line string) bool {
 			}
 		}
 	}
+	if !result {
+		if ProblemDampner(values) {
+			result = true
+		}
+	}
 
 	return result
+}
+
+func ProblemDampner(values []int) bool {
+
+	var result bool = false
+	n := len(values)
+
+	for i := 0; i < n; i++ {
+		newArr := remove(values, i)
+		if IsSafeDampner(newArr) {
+			result = true
+			break
+		}
+	}
+
+	return result
+}
+
+func IsSafeDampner(values []int) bool {
+	n := len(values)
+
+	var result bool = true
+	f := values[0]
+	s := values[1]
+
+	IsDecrease := IsDecrease(f, s)
+
+	for i := 0; i < n-1; i++ {
+		first := values[i]
+		second := values[i+1]
+
+		if !IsDecrease {
+			if IncreaseBreaker(first, second) {
+				result = false
+				break
+			}
+		} else {
+			if DecreaseBreaker(first, second) {
+				result = false
+				break
+			}
+		}
+	}
+
+	return result
+}
+
+func remove(slice []int, s int) []int {
+
+	newSlice := make([]int, len(slice))
+	copy(newSlice, slice)
+
+	return append(newSlice[:s], newSlice[s+1:]...)
 }
 
 func ConvertToArray(line string) []int {
