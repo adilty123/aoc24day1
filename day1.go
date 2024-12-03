@@ -12,7 +12,7 @@ var leftList []int
 var rightList []int
 
 func main() {
-	day2()
+	day3()
 }
 
 func day1() {
