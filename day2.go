@@ -2,6 +2,8 @@ package main
 
 import (
 	"aoc2024/utils"
+	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -9,7 +11,7 @@ func day2() {
 
 	lines := utils.ReadLines("inputs/02.txt")
 
-	var safeCount int
+	var safeCount int = 0
 
 	for i := 0; i < len(lines); i++ {
 		if IsSafe(lines[i]) {
@@ -21,35 +23,88 @@ func day2() {
 
 func IsSafe(line string) bool {
 
-	values := strings.Split(line, " ")
-
+	values := ConvertToArray(line)
 	n := len(values)
 
 	var result bool = true
-	var val int
+	f := values[0]
+	s := values[1]
 
-	for i := 0; i < n-2; i++ {
-		first := utils.ConvertToInt(values[i])
-		second := utils.ConvertToInt(values[i+1])
+	IsDecrease := IsDecrease(f, s)
+	//fmt.Println(IsDecrease)
 
-		IsDecrease := IsDecrease(first, second)
+	for i := 0; i < n-1; i++ {
+		first := values[i]
+		second := values[i+1]
 
-		val := second - first
-
-		if second <= first {
-			result = false
-			break
-		}
-
-		if val > 3 {
-			result = false
-			break
+		if !IsDecrease {
+			if IncreaseBreaker(first, second) {
+				result = false
+				break
+			}
+		} else {
+			if DecreaseBreaker(first, second) {
+				result = false
+				break
+			}
 		}
 	}
 
 	return result
 }
 
-func IsDecrease(first int, second int) bool {
+func ConvertToArray(line string) []int {
+	parts := strings.Fields(line)
 
+	// Step 2: Convert the slice of strings into a slice of integers
+	var numbers []int
+	for _, part := range parts {
+		num, err := strconv.Atoi(part)
+		if err != nil {
+			fmt.Printf("Error converting '%s' to an integer: %v\n", part, err)
+			continue // Skip invalid values
+		}
+		numbers = append(numbers, num)
+	}
+	return numbers
+}
+
+func IncreaseBreaker(first int, second int) bool {
+
+	var result bool = false
+	val := second - first
+
+	if second < first {
+		result = true
+	} else if val > 3 {
+		result = true
+	} else if second == first {
+		result = true
+	}
+
+	return result
+}
+
+func DecreaseBreaker(first int, second int) bool {
+	var result bool = false
+	val := first - second
+
+	if second > first {
+		result = true
+	} else if val > 3 {
+		result = true
+	} else if second == first {
+		result = true
+	}
+	return result
+}
+
+func IsDecrease(first int, second int) bool {
+	var result bool = false
+
+	if first > second {
+		result = true
+	}
+
+	return result
 }
