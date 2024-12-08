@@ -18,7 +18,7 @@ func day3() {
 		result, do = GetMulDoDont(lines[i], do)
 		total += result
 	}
-	println(result)
+	println(total)
 }
 
 func GetMul(line string) int {
